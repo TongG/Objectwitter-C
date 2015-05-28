@@ -1,50 +1,606 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en-us">
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="STTwitter : A comprehensive Objective-C library for Twitter API 1.1" />
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>STTwitter</title>
+    <meta charset="UTF-8">
+    <title>Objectwitter-C by Twipoker-Project</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
-
   <body>
+    <section class="page-header">
+      <h1 class="project-name">Objectwitter-C</h1>
+      <h2 class="project-tagline">A stable, mature and comprehensive Objective-C library for Twitter REST/Streaming API 1.1, based on STTwitter</h2>
+      <a href="https://github.com/Twipoker-Project/Objectwitter-C" class="btn">View on GitHub</a>
+      <a href="https://github.com/Twipoker-Project/Objectwitter-C/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/Twipoker-Project/Objectwitter-C/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/nst/STTwitter">View on GitHub</a>
+    <section class="main-content">
+      <h2>
+<a id="objectwitter-c" class="anchor" href="#objectwitter-c" aria-hidden="true"><span class="octicon octicon-link"></span></a>Objectwitter-C</h2>
 
-          <h1 id="project_title">STTwitter</h1>
-          <h2 id="project_tagline">A comprehensive Objective-C library for Twitter API 1.1</h2>
+<p><em>A stable, mature and comprehensive Objective-C library for Twitter REST API 1.1, based on <a href="https://github.com/nst/STTwitter">STTwitter</a></em></p>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/nst/STTwitter/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/nst/STTwitter/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
+<p><em>Like a FOSS version of Twitter Fabric TwitterKit, without the UI parts but with much more flexibility</em></p>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>
-<a name="see-readmemd" class="anchor" href="#see-readmemd"><span class="octicon octicon-link"></span></a>See README.md</h3>
-      </section>
-    </div>
+<p><em>Also includes a powerful Twitter dev console for OS X</em></p>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">STTwitter maintained by <a href="https://github.com/nst">nst</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<p><strong>[2015-03-28]</strong> Signed build of OS X demo app: <a href="http://www.seriot.ch/temp/STTwitterDemoOSX.app.zip">STTwitterDemoOSX.app.zip</a><br>
+<strong>[2014-06-18]</strong> <a href="https://github.com/mattdonnelly/Swifter">Swifter</a>, A Twitter framework for iOS &amp; OS X written in Swift, by @MatthewDonnelly<br>
+<strong>[2014-05-31]</strong> Follow STTwitter on Twitter: <a href="https://www.twitter.com/STTLibrary/">@STTLibrary</a><br>
+<strong>[2014-05-22]</strong> STTwitter was presented at <a href="https://www.facebook.com/events/732041160150290/">CocoaHeads Lausanne</a> (<a href="http://seriot.ch/resources/abusing_twitter_api/sttwitter_cocoaheads.pdf">slides</a>)<br>
+<strong>[2013-10-24]</strong> STTwitter was presented at <a href="http://soft-shake.ch">SoftShake 2013</a> (<a href="http://seriot.ch/resources/abusing_twitter_api/ios_twitter_integration_sos13.pdf">slides</a>).</p>
+
+<p><a href="https://travis-ci.org/nst/STTwitter"><img src="https://travis-ci.org/nst/STTwitter.svg?branch=master" alt="Build Status"></a></p>
+
+<ol>
+<li><a href="#testimonials">Testimonials</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#code-snippets">Code Snippets</a></li>
+<li><a href="#various-kinds-of-oauth-connections">Various Kinds of OAuth Connections</a></li>
+<li><a href="#twitter-digits">Twitter Digits</a></li>
+<li><a href="#oauth-consumer-tokens">OAuth Consumer Tokens</a></li>
+<li><a href="#demo--test-project">Demo / Test Project</a></li>
+<li><a href="#integration-tips">Integration Tips</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="#developers">Developers</a></li>
+<li>
+<a href="#bsd-3-clause-license">BSD 3-Clause License</a><br>
+</li>
+</ol>
+
+<h3>
+<a id="testimonials" class="anchor" href="#testimonials" aria-hidden="true"><span class="octicon octicon-link"></span></a>Testimonials</h3>
+
+<blockquote>
+<p>"We are now using STTwitter"
+<a href="https://adium.im/blog/2013/07/adium-1-5-7-released/">Adium developers</a></p>
+
+<p>"An awesome Objective-C wrapper for Twitter’s HTTP API? Yes please!"
+<a href="https://twitter.com/nilsou/status/392364862472736768">@nilsou</a></p>
+
+<p>"Your Library is really great, I stopped the development of my client because I was hating twitter APIs for some reasons, this Library make me want to continue, seriously thank you!"
+<a href="https://github.com/nst/STTwitter/pull/49#issuecomment-28746249">MP0w</a></p>
+
+<p>"Powered by his own backend wrapper for HTTP calls, STTwitter writes most of the code for you for oAuth based authentication and API resource access like statuses, mentions, users, searches, friends &amp; followers, favorites, lists, places, trends. The documentation is also excellent."
+<a href="http://buddingdevelopers.com/sttwitter-delightful-twitter-library-for-ios/">STTwitter - Delightful Twitter Library for iOS / buddingdevelopers.com</a></p>
+
+<p>Starting using STTwitter on a project. It is absolutely amazing. So easy to use. Thanks @nst021
+<a href="https://twitter.com/iOSDevZone/status/578975327264747520">@iOSDevZone</a></p>
+
+<p>"I'm using this library for a WatchKit app and it works fantastically." <a href="https://github.com/nst/STTwitter/issues/177">inb4ohnoes</a></p>
+
+<p>"I love STTwitter - it made things a breeze when building <a href="http://bit.ly/entourageio">@entourageio</a>" <a href="https://twitter.com/_jeffreyjackson/status/573961997747773441">@_jeffreyjackson</a></p>
+</blockquote>
+
+<h3>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h3>
+
+<p>Drag and drop STTwitter directory into your project.</p>
+
+<p>Link your project with the following frameworks:</p>
+
+<ul>
+<li>Accounts.framework</li>
+<li>Social.framework</li>
+<li>Twitter.framework (iOS only)</li>
+<li>Security.framework (OS X only)</li>
+</ul>
+
+<p>If you want to use CocoaPods, add the following two lines to your Podfile:</p>
+
+<pre><code>pod 'STTwitter'
+</code></pre>
+
+<p>Then, run the following command to install the STTwitter pod:</p>
+
+<pre><code>pod install
+</code></pre>
+
+<p>STTwitter does not depend on AppKit or UIKit and hence can be used in a command-line Twitter client.</p>
+
+<p>STTwitter requires iOS 5+ or OS X 10.7+.</p>
+
+<p>Vea Software has a great live-demo <a href="http://www.veasoftware.com/tutorials/2014/6/17/xcode-5-tutorial-ios-7-app-only-authentication-twitter-api-version-11">tutorial</a> about creating a simple iOS app using STTwitter's app only mode.</p>
+
+<h3>
+<a id="code-snippets" class="anchor" href="#code-snippets" aria-hidden="true"><span class="octicon octicon-link"></span></a>Code Snippets</h3>
+
+<p>Here are several ways to use STTwitter.</p>
+
+<p>You'll find complete, minimal, command-line projects in the <code>demo_cli</code> directory:</p>
+
+<ul>
+<li>
+<a href="https://github.com/nst/STTwitter/blob/master/demo_cli/streaming/main.m">streaming</a> use the streaming API to filter all tweets with some word</li>
+<li>
+<a href="https://github.com/nst/STTwitter/blob/master/demo_cli/streaming_with_bot/main.m">streaming_with_bot</a> same as above, but reply instantly from another account</li>
+<li>
+<a href="https://github.com/nst/STTwitter/blob/master/demo_cli/reverse_auth/main.m">reverse_auth</a> perform reverse authentication</li>
+<li>
+<a href="https://github.com/nst/STTwitter/blob/master/demo_cli/followers/main.m">followers</a> display your followers by following Twitter's API cursors, and waiting for a while before reaching rate limits</li>
+<li>
+<a href="https://github.com/nst/STTwitter/blob/master/demo_cli/favorites/main.m">favorites</a> display tweets favorited by people you follow, set a tweet's favorite status</li>
+<li>
+<a href="https://github.com/nst/STTwitter/blob/master/demo_cli/conversation/main.m">conversation</a> post several tweets in the same conversation</li>
+<li>
+<a href="https://github.com/nst/STTwitter/blob/master/demo_cli/t2rss/main.m">t2rss</a> convert your timeline into an RSS feed</li>
+</ul>
+
+<h5>
+<a id="instantiate-sttwitterapi" class="anchor" href="#instantiate-sttwitterapi" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instantiate STTwitterAPI</h5>
+
+<div class="highlight highlight-Objective-C"><pre>STTwitterAPI *twitter = [STTwitterAPI <span class="pl-c1">twitterAPIWithOAuthConsumerKey:</span><span class="pl-s"><span class="pl-pds">@"</span><span class="pl-pds">"</span></span>
+                                                      <span class="pl-c1">consumerSecret:</span><span class="pl-s"><span class="pl-pds">@"</span><span class="pl-pds">"</span></span>
+                                                            <span class="pl-c1">username:</span><span class="pl-s"><span class="pl-pds">@"</span><span class="pl-pds">"</span></span>
+                                                            <span class="pl-c1">password:</span><span class="pl-s"><span class="pl-pds">@"</span><span class="pl-pds">"</span></span>];</pre></div>
+
+<h5>
+<a id="verify-the-credentials" class="anchor" href="#verify-the-credentials" aria-hidden="true"><span class="octicon octicon-link"></span></a>Verify the credentials</h5>
+
+<div class="highlight highlight-Objective-C"><pre>[twitter <span class="pl-c1">verifyCredentialsWithUserSuccessBlock:</span>^(<span class="pl-c1">NSString</span> *username, <span class="pl-c1">NSString</span> *userID) {
+    <span class="pl-c">// ...</span>
+} <span class="pl-c1">errorBlock:</span>^(<span class="pl-c1">NSError</span> *error) {
+    <span class="pl-c">// ...</span>
+}];</pre></div>
+
+<h5>
+<a id="get-the-timeline-statuses" class="anchor" href="#get-the-timeline-statuses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get the timeline statuses</h5>
+
+<div class="highlight highlight-Objective-C"><pre>[twitter <span class="pl-c1">getHomeTimelineSinceID:</span><span class="pl-c1">nil</span>
+                          <span class="pl-c1">count:</span><span class="pl-c1">100</span>
+                   <span class="pl-c1">successBlock:</span>^(<span class="pl-c1">NSArray</span> *statuses) {
+    <span class="pl-c">// ...</span>
+} <span class="pl-c1">errorBlock:</span>^(<span class="pl-c1">NSError</span> *error) {
+    <span class="pl-c">// ...</span>
+}];</pre></div>
+
+<h5>
+<a id="streaming-api" class="anchor" href="#streaming-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>Streaming API</h5>
+
+<div class="highlight highlight-Objective-C"><pre>NSObject &lt;STTwitterRequestProtocol&gt; *request = [twitter <span class="pl-c1">getStatusesSampleDelimited:</span><span class="pl-c1">nil</span>
+                                                                     <span class="pl-c1">stallWarnings:</span><span class="pl-c1">nil</span>
+                                                                     <span class="pl-c1">progressBlock:</span>^(<span class="pl-k">id</span> response) {
+    <span class="pl-c">// ...</span>
+} <span class="pl-c1">stallWarningBlock:</span><span class="pl-c1">nil</span>
+         <span class="pl-c1">errorBlock:</span>^(<span class="pl-c1">NSError</span> *error) {
+    <span class="pl-c">// ...</span>
+}];
+
+<span class="pl-c">// ...</span>
+
+[request <span class="pl-c1">cancel</span>]; <span class="pl-c">// when you're done with it</span></pre></div>
+
+<h5>
+<a id="app-only-authentication" class="anchor" href="#app-only-authentication" aria-hidden="true"><span class="octicon octicon-link"></span></a>App Only Authentication</h5>
+
+<div class="highlight highlight-Objective-C"><pre>STTwitterAPI *twitter = [STTwitterAPI <span class="pl-c1">twitterAPIAppOnlyWithConsumerKey:</span><span class="pl-s"><span class="pl-pds">@"</span><span class="pl-pds">"</span></span>
+                                                        <span class="pl-c1">consumerSecret:</span><span class="pl-s"><span class="pl-pds">@"</span><span class="pl-pds">"</span></span>];
+
+[twitter <span class="pl-c1">verifyCredentialsWithUserSuccessBlock:</span>^(<span class="pl-c1">NSString</span> *username, <span class="pl-c1">NSString</span> *userID) {
+
+    [twitter <span class="pl-c1">getUserTimelineWithScreenName:</span><span class="pl-s"><span class="pl-pds">@"</span>barackobama<span class="pl-pds">"</span></span>
+                              <span class="pl-c1">successBlock:</span>^(<span class="pl-c1">NSArray</span> *statuses) {
+        <span class="pl-c">// ...</span>
+    } <span class="pl-c1">errorBlock:</span>^(<span class="pl-c1">NSError</span> *error) {
+        <span class="pl-c">// ...</span>
+    }];
+
+} <span class="pl-c1">errorBlock:</span>^(<span class="pl-c1">NSError</span> *error) {
+    <span class="pl-c">// ...</span>
+}];</pre></div>
+
+<h5>
+<a id="enumerate-results-with-cursors-pause-according-to-rate-limits" class="anchor" href="#enumerate-results-with-cursors-pause-according-to-rate-limits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Enumerate results with cursors, pause according to rate limits</h5>
+
+<div class="highlight highlight-Objective-C"><pre>[_twitter <span class="pl-c1">fetchAndFollowCursorsForResource:</span><span class="pl-s"><span class="pl-pds">@"</span>followers/ids.json<span class="pl-pds">"</span></span>
+                                <span class="pl-c1">HTTPMethod:</span><span class="pl-s"><span class="pl-pds">@"</span>GET<span class="pl-pds">"</span></span>
+                             <span class="pl-c1">baseURLString:</span><span class="pl-s"><span class="pl-pds">@"</span>https://api.twitter.com/1.1<span class="pl-pds">"</span></span>
+                                <span class="pl-c1">parameters:</span>@{<span class="pl-s"><span class="pl-pds">@"</span>screen_name<span class="pl-pds">"</span></span>:<span class="pl-s"><span class="pl-pds">@"</span>0xcharlie<span class="pl-pds">"</span></span>}
+                       <span class="pl-c1">uploadProgressBlock:</span><span class="pl-c1">nil</span>
+                     <span class="pl-c1">downloadProgressBlock:</span><span class="pl-c1">nil</span>
+                              <span class="pl-c1">successBlock:</span>^(<span class="pl-k">id</span> request, <span class="pl-c1">NSDictionary</span> *requestHeaders, <span class="pl-c1">NSDictionary</span> *responseHeaders, <span class="pl-k">id</span> response, <span class="pl-k">BOOL</span> morePagesToCome, <span class="pl-k">BOOL</span> *stop) {
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>-- success, more to come: <span class="pl-c1">%d</span>, <span class="pl-c1">%@</span><span class="pl-pds">"</span></span>, morePagesToCome, response);
+} <span class="pl-c1">pauseBlock:</span>^(<span class="pl-c1">NSDate</span> *nextRequestDate) {
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>-- rate limit exhausted, nextRequestDate: <span class="pl-c1">%@</span><span class="pl-pds">"</span></span>, nextRequestDate);
+} <span class="pl-c1">errorBlock:</span>^(<span class="pl-k">id</span> request, <span class="pl-c1">NSDictionary</span> *requestHeaders, <span class="pl-c1">NSDictionary</span> *responseHeaders, <span class="pl-c1">NSError</span> *error) {
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>-- <span class="pl-c1">%@</span><span class="pl-pds">"</span></span>, error);
+}];</pre></div>
+
+<h3>
+<a id="various-kinds-of-oauth-connections" class="anchor" href="#various-kinds-of-oauth-connections" aria-hidden="true"><span class="octicon octicon-link"></span></a>Various Kinds of OAuth Connections</h3>
+
+<p>You can instantiate <code>STTwitterAPI</code> in three ways:</p>
+
+<ul>
+<li>use the Twitter account set in OS X Preferences or iOS Settings</li>
+<li>use a custom <code>consumer key</code> and <code>consumer secret</code> (four flavors)
+
+<ul>
+<li>get an URL, fetch a PIN, enter it in your app, get oauth access tokens<br>
+</li>
+<li>set <code>username</code> and <code>password</code>, get oauth access tokens with XAuth, if the app is entitled to</li>
+<li>set <code>oauth token</code> and <code>oauth token secret</code> directly</li>
+<li>open Safari (or a <code>UIWebView</code> instance if you prefer), authenticate on Twitter and receive access tokens in your app through a custom URL scheme</li>
+</ul>
+</li>
+<li>use the <a href="https://dev.twitter.com/docs/auth/application-only-auth">Application Only</a> authentication and get / use a "bearer token"</li>
+</ul>
+
+<p>So there are five cases altogether, hence these five methods:</p>
+
+<div class="highlight highlight-Objective-C"><pre>+ (STTwitterAPI *)twitterAPIOSWithFirstAccount;
+
++ (STTwitterAPI *)twitterAPIWithOAuthConsumerKey:(<span class="pl-c1">NSString</span> *)consumerKey
+                                  consumerSecret:(<span class="pl-c1">NSString</span> *)consumerSecret;
+
++ (STTwitterAPI *)twitterAPIWithOAuthConsumerKey:(<span class="pl-c1">NSString</span> *)consumerKey
+                                  consumerSecret:(<span class="pl-c1">NSString</span> *)consumerSecret
+                                        username:(<span class="pl-c1">NSString</span> *)username
+                                        password:(<span class="pl-c1">NSString</span> *)password;
+
++ (STTwitterAPI *)twitterAPIWithOAuthConsumerKey:(<span class="pl-c1">NSString</span> *)consumerKey
+                                  consumerSecret:(<span class="pl-c1">NSString</span> *)consumerSecret
+                                      oauthToken:(<span class="pl-c1">NSString</span> *)oauthToken
+                                oauthTokenSecret:(<span class="pl-c1">NSString</span> *)oauthTokenSecret;
+
++ (STTwitterAPI *)twitterAPIAppOnlyWithConsumerKey:(<span class="pl-c1">NSString</span> *)consumerKey
+                                    consumerSecret:(<span class="pl-c1">NSString</span> *)consumerSecret;</pre></div>
+
+<h5>
+<a id="callbacks-urls" class="anchor" href="#callbacks-urls" aria-hidden="true"><span class="octicon octicon-link"></span></a>Callbacks URLs</h5>
+
+<p>After authenticating in Safari or in a web view, Twitter redirects to the callback URL with some additional parameters. (<a href="https://apps.twitter.com/">Your Twitter app' settings</a> MUST allow the usage of callbacks by specifying a dummy URL, such as <code>http://www.cnn.com</code>.
+This URL is then overriden by the <code>oauthCallback</code> parameter in:</p>
+
+<pre><code>- (void)postTokenRequest:(void(^)(NSURL *url, NSString *oauthToken))successBlock
+authenticateInsteadOfAuthorize:(BOOL)authenticateInsteadOfAuthorize
+              forceLogin:(NSNumber *)forceLogin
+              screenName:(NSString *)screenName
+           oauthCallback:(NSString *)oauthCallback
+              errorBlock:(void(^)(NSError *error))errorBlock;
+</code></pre>
+
+<p><img border="1" src="Art/twitter_app_settings.png" width="600" alt="STTwitter Twitter App Settings"></p>
+
+<h5>
+<a id="reverse-authentication" class="anchor" href="#reverse-authentication" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reverse Authentication</h5>
+
+<p>Reference: <a href="https://dev.twitter.com/docs/ios/using-reverse-auth">https://dev.twitter.com/docs/ios/using-reverse-auth</a></p>
+
+<p>The most common use case of reverse authentication is letting users register/login to a remote service with their OS X or iOS Twitter account.</p>
+
+<pre><code>iOS/OSX     Twitter     Server
+--------------&gt;                 reverse auth.
+&lt; - - - - - - -                 access tokens
+
+-----------------------------&gt;  access tokens
+
+               &lt;--------------  access Twitter on user's behalf
+                - - - - - - -&gt;
+</code></pre>
+
+<p>Here is how to use reverse authentication with STTwitter:</p>
+
+<div class="highlight highlight-Objective-C"><pre>STTwitterAPI *twitter = [STTwitterAPI <span class="pl-c1">twitterAPIWithOAuthConsumerName:</span><span class="pl-c1">nil</span>
+                                                          <span class="pl-c1">consumerKey:</span><span class="pl-s"><span class="pl-pds">@"</span>CONSUMER_KEY<span class="pl-pds">"</span></span>
+                                                       <span class="pl-c1">consumerSecret:</span><span class="pl-s"><span class="pl-pds">@"</span>CONSUMER_SECRET<span class="pl-pds">"</span></span>];
+
+[twitter <span class="pl-c1">postReverseOAuthTokenRequest:</span>^(<span class="pl-c1">NSString</span> *authenticationHeader) {
+
+    STTwitterAPI *twitterAPIOS = [STTwitterAPI <span class="pl-c1">twitterAPIOSWithFirstAccount</span>];
+
+    [twitterAPIOS <span class="pl-c1">verifyCredentialsWithUserSuccessBlock:</span>^(<span class="pl-c1">NSString</span> *username, <span class="pl-c1">NSString</span> *userID) {
+
+        [twitterAPIOS <span class="pl-c1">postReverseAuthAccessTokenWithAuthenticationHeader:</span>authenticationHeader
+                                                            <span class="pl-c1">successBlock:</span>^(<span class="pl-c1">NSString</span> *oAuthToken,
+                                                                           <span class="pl-c1">NSString</span> *oAuthTokenSecret,
+                                                                           <span class="pl-c1">NSString</span> *userID,
+                                                                           <span class="pl-c1">NSString</span> *screenName) {
+
+                                                                <span class="pl-c">// use the tokens...</span>
+
+                                                            } <span class="pl-c1">errorBlock:</span>^(<span class="pl-c1">NSError</span> *error) {
+                                                                <span class="pl-c">// ...</span>
+                                                            }];
+
+    } <span class="pl-c1">errorBlock:</span>^(<span class="pl-c1">NSError</span> *error) {
+        <span class="pl-c">// ...</span>
+    }];
+
+} <span class="pl-c1">errorBlock:</span>^(<span class="pl-c1">NSError</span> *error) {
+    <span class="pl-c">// ...</span>
+}];</pre></div>
+
+<p>Contrary to what can be read here and there, you can perfectly <a href="http://stackoverflow.com/questions/17990484/accessing-twitter-direct-messages-using-slrequest-ios/18760445#18760445">access direct messages from iOS Twitter accounts</a>.</p>
+
+<h3>
+<a id="twitter-digits" class="anchor" href="#twitter-digits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Twitter Digits</h3>
+
+<p><a href="https://dev.twitter.com/twitter-kit/ios/digits">https://dev.twitter.com/twitter-kit/ios/digits</a></p>
+
+<p>In this flow, you start with consumer tokens and app only mode, and end up with access tokens, after verifying a phone number with a PIN sent by SMS.</p>
+
+<p>It goes like this:</p>
+
+<pre><code>1. start with consumer tokens
+2. get a bearer token (ie. app only mode)
+2. get a guest token, (ie. temporary user id)
+3. post a phone number, using the guest token
+4. post the received PIN code for the phone number, using the guest token
+5. receive access tokens in return
+</code></pre>
+
+<p>See a working example in <a href="https://github.com/nst/STTwitter/blob/master/demo_osx/STTwitterDemoOSX/STAuthenticationVC.m#L368-L407">STAuthenticationVC.m</a>.</p>
+
+<h3>
+<a id="oauth-consumer-tokens" class="anchor" href="#oauth-consumer-tokens" aria-hidden="true"><span class="octicon octicon-link"></span></a>OAuth Consumer Tokens</h3>
+
+<p>In Twitter REST API v1.1, each client application must authenticate itself with <code>consumer key</code> and <code>consumer secret</code> tokens. You can request consumer tokens for your app on Twitter's website: <a href="https://dev.twitter.com/apps">https://dev.twitter.com/apps</a>.</p>
+
+<p>STTwitter demo project comes with <code>TwitterClients.plist</code> where you can enter your own consumer tokens.</p>
+
+<h3>
+<a id="demo--test-project" class="anchor" href="#demo--test-project" aria-hidden="true"><span class="octicon octicon-link"></span></a>Demo / Test Project</h3>
+
+<p>There is a demo project for OS X in <code>demo_osx</code>, which lets you choose how to get the OAuth tokens (see below).</p>
+
+<p>An archive generated on 2013-10-20 10:35 is available at <a href="http://seriot.ch/temp/STTwitterDemoOSX.app.zip">http://seriot.ch/temp/STTwitterDemoOSX.app.zip</a>.</p>
+
+<p>Once you got the OAuth tokens, you can get your timeline and post a new status.</p>
+
+<p>There is also a simple iOS demo project in <code>demo_ios</code>.</p>
+
+<p><img border="1" src="Art/osx.png" width="840" alt="STTwitter Demo iOS">
+<img border="1" src="Art/ios.png" alt="STTwitter Demo iOS">
+<img border="1" src="Art/tweet.png" alt="sample tweet"></p>
+
+<h3>
+<a id="integration-tips" class="anchor" href="#integration-tips" aria-hidden="true"><span class="octicon octicon-link"></span></a>Integration Tips</h3>
+
+<h5>
+<a id="concurrency" class="anchor" href="#concurrency" aria-hidden="true"><span class="octicon octicon-link"></span></a>Concurrency</h5>
+
+<p>STTwitter is supposed to be used from the main thread. The HTTP requests are performed anychronously and the callbacks are guaranteed to be called on main thread.</p>
+
+<h5>
+<a id="credentials-verification" class="anchor" href="#credentials-verification" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credentials verification</h5>
+
+<p>There's no need to verify the credentials before each request.</p>
+
+<p>Doing so when the application starts and when the application enters foreground sounds reasonable, though.</p>
+
+<h5>
+<a id="timeout" class="anchor" href="#timeout" aria-hidden="true"><span class="octicon octicon-link"></span></a>Timeout</h5>
+
+<p>Unless told otherwise, STTwitter will use the underling classes default timeouts.</p>
+
+<p>You can also set the timeout by yourself:</p>
+
+<pre><code>[twitter setTimeoutInSeconds:5.0];
+</code></pre>
+
+<h5>
+<a id="remove-asserts-in-release-mode" class="anchor" href="#remove-asserts-in-release-mode" aria-hidden="true"><span class="octicon octicon-link"></span></a>Remove Asserts in Release Mode</h5>
+
+<p>There are several asserts in the code. They are very useful in debug mode but you should not include them in release.</p>
+
+<p>New projects created with Xcode 5 already remove NSAssert logic by default in release.</p>
+
+<p>In older projects, you can set the compilation flag <code>-DNS_BLOCK_ASSERTIONS=1</code>.</p>
+
+<h5>
+<a id="number-of-characters-in-a-tweet" class="anchor" href="#number-of-characters-in-a-tweet" aria-hidden="true"><span class="octicon octicon-link"></span></a>Number of Characters in a Tweet</h5>
+
+<p>Use the method <code>-[NSString st_numberOfCharactersInATweet]</code> to let the user know how many characters she can enter before the end of the Tweet. The method may also return a negative value if the string exceeds a tweet's maximum length. The method considers the shortened URL lengths.</p>
+
+<h5>
+<a id="date-formatter" class="anchor" href="#date-formatter" aria-hidden="true"><span class="octicon octicon-link"></span></a>Date Formatter</h5>
+
+<p>In order to convert the string in the <code>created_at</code> field from Twitter's JSON into an NSDate instance, you can use the <code>+[NSDateFormatter st_TwitterDateFormatter]</code>.</p>
+
+<div class="highlight highlight-Objective-C"><pre><span class="pl-c1">NSDateFormatter</span> *df = [<span class="pl-c1">NSDateFormatter</span> <span class="pl-c1">st_TwitterDateFormatter</span>];
+<span class="pl-c1">NSString</span> *dateString = [d <span class="pl-c1">valueForKey:</span><span class="pl-s"><span class="pl-pds">@"</span>created_at<span class="pl-pds">"</span></span>]; <span class="pl-c">// "Sun Jun 28 20:33:01 +0000 2009"</span>
+<span class="pl-c1">NSDate</span> *date = [df <span class="pl-c1">dateFromString:</span>dateString];</pre></div>
+
+<h5>
+<a id="urls-shorteners" class="anchor" href="#urls-shorteners" aria-hidden="true"><span class="octicon octicon-link"></span></a>URLs Shorteners</h5>
+
+<p>In order to expand shortened URLs such as Twitter's <code>t.co</code> service, use:</p>
+
+<div class="highlight highlight-Objective-C"><pre>[STHTTPRequest <span class="pl-c1">expandedURLStringForShortenedURLString:</span><span class="pl-s"><span class="pl-pds">@"</span>http://t.co/tmoxbSfDWc<span class="pl-pds">"</span></span> <span class="pl-c1">successBlock:</span>^(<span class="pl-c1">NSString</span> *expandedURLString) {
+    <span class="pl-c">//</span>
+} <span class="pl-c1">errorBlock:</span>^(<span class="pl-c1">NSError</span> *error) {
+    <span class="pl-c">//</span>
+}];</pre></div>
+
+<h5>
+<a id="api-responses-text-processing" class="anchor" href="#api-responses-text-processing" aria-hidden="true"><span class="octicon octicon-link"></span></a>API Responses Text Processing</h5>
+
+<p>You may want to use Twitter's own Objective-C library for text processing: <a href="https://github.com/twitter/twitter-text-objc/">https://github.com/twitter/twitter-text-objc/</a>.</p>
+
+<p><code>twitter-text-objc</code> provides you with methods such as:</p>
+
+<div class="highlight highlight-Objective-C"><pre>+ (<span class="pl-c1">NSArray</span>*)entitiesInText:(<span class="pl-c1">NSString</span>*)text;
++ (<span class="pl-c1">NSArray</span>*)URLsInText:(<span class="pl-c1">NSString</span>*)text;
++ (<span class="pl-c1">NSArray</span>*)hashtagsInText:(<span class="pl-c1">NSString</span>*)text checkingURLOverlap:(<span class="pl-k">BOOL</span>)checkingURLOverlap;
++ (<span class="pl-c1">NSArray</span>*)symbolsInText:(<span class="pl-c1">NSString</span>*)text checkingURLOverlap:(<span class="pl-k">BOOL</span>)checkingURLOverlap;
++ (<span class="pl-c1">NSArray</span>*)mentionedScreenNamesInText:(<span class="pl-c1">NSString</span>*)text;
++ (<span class="pl-c1">NSArray</span>*)mentionsOrListsInText:(<span class="pl-c1">NSString</span>*)text;
++ (TwitterTextEntity*)repliedScreenNameInText:(<span class="pl-c1">NSString</span>*)text;</pre></div>
+
+<h5>
+<a id="logout" class="anchor" href="#logout" aria-hidden="true"><span class="octicon octicon-link"></span></a>Logout</h5>
+
+<p>The correct approach to logout a user is setting the <code>STTwitterAPI</code> instance to nil.</p>
+
+<p>You'll create a new one at the next login.</p>
+
+<h5>
+<a id="boolean-parameters" class="anchor" href="#boolean-parameters" aria-hidden="true"><span class="octicon octicon-link"></span></a>Boolean Parameters</h5>
+
+<p>There are a lot of optional parameters in Twitter API. In STTwitter, you can ignore such parameters by passing <code>nil</code>. Regarding boolean parameters, STTwitter can't just use Objective-C <code>YES</code> and <code>NO</code> because <code>NO</code> has the same value as <code>nil</code> (zero). So boolean parameters are wrapped into <code>NSNumber</code> objects, which are pretty easy to use with boolean values thanks to Objective-C literals. So, with STTwitter, you will assign an optional parameter of Twitter API either as <code>@(YES)</code>, <code>@(NO)</code> or <code>nil</code>.</p>
+
+<h5>
+<a id="long-methods" class="anchor" href="#long-methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>Long Methods</h5>
+
+<p>STTwitter provides a full, "one-to-one" Objective-C front-end to Twitter REST API. It often results in long methd names with many parameters. In your application, you may want to add your own, simplified methods on top of STTwitterAPI. A good idea is to create an Objective-C category for your application, such as in the following code.</p>
+
+<p><code>STTwitterAPI+MyApp.h</code></p>
+
+<div class="highlight highlight-Objective-C"><pre>#<span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">"</span>STTwitterAPI.h<span class="pl-pds">"</span></span>
+
+<span class="pl-k">@interface</span> <span class="pl-en">STTwitterAPI</span> (MyApp)
+
+- (<span class="pl-k">void</span>)<span class="pl-en">getStatusesShowID</span><span class="pl-en">:</span>(<span class="pl-c1">NSString</span> *)<span class="pl-smi">statusID</span>
+             <span class="pl-en">successBlock</span><span class="pl-en">:</span>(<span class="pl-k">void</span>(^)(<span class="pl-c1">NSDictionary</span> *status))<span class="pl-en">successBlock</span>
+               <span class="pl-en">errorBlock</span><span class="pl-en">:</span>(<span class="pl-k">void</span>(^)(<span class="pl-c1">NSError</span> *error))<span class="pl-en">errorBlock</span>;
+
+<span class="pl-k">@end</span></pre></div>
+
+<p><code>STTwitterAPI+MyApp.m</code></p>
+
+<div class="highlight highlight-Objective-C"><pre>#<span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">"</span>STTwitterAPI+MyApp.h<span class="pl-pds">"</span></span>
+
+<span class="pl-k">@implementation</span> <span class="pl-en">STTwitterAPI</span> (MyApp)
+
+- (<span class="pl-k">void</span>)<span class="pl-en">getStatusesShowID</span><span class="pl-en">:</span>(<span class="pl-c1">NSString</span> *)<span class="pl-smi">statusID</span>
+             <span class="pl-en">successBlock</span><span class="pl-en">:</span>(<span class="pl-k">void</span>(^)(<span class="pl-c1">NSDictionary</span> *status))<span class="pl-en">successBlock</span>
+               <span class="pl-en">errorBlock</span><span class="pl-en">:</span>(<span class="pl-k">void</span>(^)(<span class="pl-c1">NSError</span> *error))<span class="pl-en">errorBlock</span> {
+
+    [<span class="pl-v">self</span> <span class="pl-c1">getStatusesShowID:</span>statusID
+                   <span class="pl-c1">trimUser:</span>@(<span class="pl-c1">YES</span>)
+           <span class="pl-c1">includeMyRetweet:</span><span class="pl-c1">nil</span>
+            <span class="pl-c1">includeEntities:</span>@(<span class="pl-c1">NO</span>)
+               <span class="pl-c1">successBlock:</span>^(<span class="pl-c1">NSDictionary</span> *status) {
+
+                   <span class="pl-c1">successBlock</span>(status);
+
+               } <span class="pl-c1">errorBlock:</span>^(<span class="pl-c1">NSError</span> *error) {
+
+                   <span class="pl-c1">errorBlock</span>(error);
+
+               }];
+}
+
+<span class="pl-k">@end</span></pre></div>
+
+<h5>
+<a id="stream-request-and-connection-losses" class="anchor" href="#stream-request-and-connection-losses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stream Request and Connection Losses</h5>
+
+<p>Streaming requests may be lost when your iOS application comes back to foreground after a while in background. In order to handle this case properly, you can detect the connection loss in the error block and restart the stream request from there.</p>
+
+<div class="highlight highlight-Objective-C"><pre><span class="pl-c">// ...</span>
+} errorBlock:^(<span class="pl-c1">NSError</span> *error) {
+
+    <span class="pl-k">if</span>([[error <span class="pl-c1">domain</span>] <span class="pl-c1">isEqualToString:</span><span class="pl-c1">NSURLErrorDomain</span>] &amp;&amp; [error <span class="pl-c1">code</span>] == NSURLErrorNetworkConnectionLost) {
+        [<span class="pl-v">self</span> <span class="pl-c1">startStreamRequest</span>];
+    }
+
+}];</pre></div>
+
+<h3>
+<a id="troubleshooting" class="anchor" href="#troubleshooting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Troubleshooting</h3>
+
+<h5>
+<a id="xauth" class="anchor" href="#xauth" aria-hidden="true"><span class="octicon octicon-link"></span></a>xAuth</h5>
+
+<p>Twitter restricts the xAuth authentication process to xAuth-enabled consumer tokens only. So, if you get an error like <code>The consumer tokens are probably not xAuth enabled.</code> while accessing <code>https://api.twitter.com/oauth/access_token</code>, see Twitter's website <a href="https://dev.twitter.com/docs/oauth/xauth">https://dev.twitter.com/docs/oauth/xauth</a> and ask Twitter to enable the xAuth authentication process for your consumer tokens.</p>
+
+<h5>
+<a id="anything-else" class="anchor" href="#anything-else" aria-hidden="true"><span class="octicon octicon-link"></span></a>Anything Else</h5>
+
+<p>Please <a href="https://github.com/nst/STTwitter/issues">fill an issue</a> on GitHub or use the <a href="http://stackoverflow.com/questions/tagged/sttwitter">STTwitter tag</a> on StackOverflow.</p>
+
+<h3>
+<a id="developers" class="anchor" href="#developers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Developers</h3>
+
+<p>The application only interacts with <code>STTwitterAPI</code>.</p>
+
+<p><code>STTwitterAPI</code> maps Objective-C methods with all Twitter API endpoints.</p>
+
+<p>You can create your own convenience methods with fewer parameters. You can also use this generic method directly:</p>
+
+<div class="highlight highlight-Objective-C"><pre>  - (<span class="pl-k">id</span>)fetchResource:(<span class="pl-c1">NSString</span> *)resource
+           HTTPMethod:(<span class="pl-c1">NSString</span> *)HTTPMethod
+        baseURLString:(<span class="pl-c1">NSString</span> *)baseURLString
+           parameters:(<span class="pl-c1">NSDictionary</span> *)params
+  uploadProgressBlock:(<span class="pl-k">void</span>(^)(<span class="pl-k">NSInteger</span> bytesWritten, <span class="pl-k">NSInteger</span> totalBytesWritten, <span class="pl-k">NSInteger</span> totalBytesExpectedToWrite))uploadProgressBlock
+downloadProgressBlock:(<span class="pl-k">void</span>(^)(NSObject&lt;STTwitterRequestProtocol&gt; *request, <span class="pl-k">id</span> response))downloadProgressBlock
+         successBlock:(<span class="pl-k">void</span>(^)(NSObject&lt;STTwitterRequestProtocol&gt; *request, <span class="pl-c1">NSDictionary</span> *requestHeaders, <span class="pl-c1">NSDictionary</span> *responseHeaders, <span class="pl-k">id</span> response))successBlock
+           errorBlock:(<span class="pl-k">void</span>(^)(NSObject&lt;STTwitterRequestProtocol&gt; *request, <span class="pl-c1">NSDictionary</span> *requestHeaders, <span class="pl-c1">NSDictionary</span> *responseHeaders, <span class="pl-c1">NSError</span> *error))errorBlock;</pre></div>
+
+<h5>
+<a id="layer-model" class="anchor" href="#layer-model" aria-hidden="true"><span class="octicon octicon-link"></span></a>Layer Model</h5>
+
+<pre><code> +------------------------------------------------------------------------+
+ |                         Your Application                               |
+ +--------------------------------------------------------+---------------+
+ |                  STTwitterAPI                          | STTwitterHTML |
+ +--------------------------------------------------------+               |
+ + - - - - - - - - - - - - - - - - - - - - - - - - - - - -+               |
+ |              STTwitterOAuthProtocol                    |               |
+ + - - - - - - - - - - - - - - - - - - - - - - - - - - - -+               |
+ +--------------------+----------------+------------------+               |
+ |    STTwitterOS     | STTwitterOAuth | STTwitterAppOnly |               |
+ +--------------------+----------------+------------------+---------------+
+ | STTwitterOSRequest |                   STHTTPRequest                   |
+ +--------------------+---------------------------------------------------+
+  |
+  + Accounts.framework
+  + Social.framework
+</code></pre>
+
+<h5>
+<a id="summary" class="anchor" href="#summary" aria-hidden="true"><span class="octicon octicon-link"></span></a>Summary</h5>
+
+<pre><code> * STTwitterAPI
+    - can be instantiated with the authentication mode you want
+    - provides methods to interact with each Twitter API endpoint
+
+ * STTwitterHTML
+    - a hackish class to login on Twitter by parsing the HTML code and get a PIN
+    - it can break at anytime, your app should not rely on it in production
+
+ * STTwitterOAuthProtocol
+    - provides generic methods to POST and GET resources on Twitter's hosts
+
+ * STTwitterOS
+    - uses Twitter accounts defined in OS X Preferences or iOS Settings
+    - uses OS X / iOS frameworks to interact with Twitter API
+
+ * STTwitterOSRequest
+    - block-based wrapper around SLRequest's underlying NSURLRequest
+
+ * STTwitterOAuth
+    - implements OAuth and xAuth authentication
+
+ * STTwitterAppOnly
+    - implements the 'app only' authentication
+    - https://dev.twitter.com/docs/auth/application-only-auth
+
+ * STHTTPRequest
+    - block-based wrapper around NSURLConnection
+    - https://github.com/nst/STHTTPRequest
+</code></pre>
+
+<h3>
+<a id="bsd-3-clause-license" class="anchor" href="#bsd-3-clause-license" aria-hidden="true"><span class="octicon octicon-link"></span></a>BSD 3-Clause License</h3>
+
+<p>See <a href="LICENCE.txt">LICENCE.txt</a>.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/Twipoker-Project/Objectwitter-C">Objectwitter-C</a> is maintained by <a href="https://github.com/Twipoker-Project">Twipoker-Project</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-    </div>
 
-    
+    </section>
 
+  
   </body>
 </html>
+
