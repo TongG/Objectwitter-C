@@ -23,6 +23,7 @@
   ██████████████████████████████████████████████████████████████████████████████████████████████*/
 
 #import "OTCTweet.h"
+#import "OTCMutableTweet.h"
 #import "OTCHashtag.h"
 #import "OTCFinancialSymbol.h"
 #import "OTCEmbeddedURL.h"
@@ -43,9 +44,9 @@
 @synthesize tweetID = _tweetID;
 
 #pragma mark Actions
-@synthesize isFavoritedByMe = _isFavoritedByMe;
+@dynamic isFavoritedByMe;
 @synthesize favoriteCount = _favoriteCount;
-@synthesize isRetweetedByMe = _isRetweetedByMe;
+@dynamic isRetweetedByMe;
 @synthesize retweetCount = _retweetCount;
 
 #pragma mark Content
@@ -168,6 +169,26 @@
         }
 
     return self;
+    }
+
+- ( BOOL ) isFavoritedByMe
+    {
+    return self->_isFavoritedByMe;
+    }
+
+- ( void ) setFavoritedByMe: ( BOOL )_YesOrNo
+    {
+    self->_isFavoritedByMe = _YesOrNo;
+    }
+
+- ( BOOL ) isRetweetedByMe
+    {
+    return self->_isRetweetedByMe;
+    }
+
+- ( void ) setRetweetedByMe: ( BOOL )_YesOrNo
+    {
+    self->_isRetweetedByMe = _YesOrNo;
     }
 
 #pragma mark Comparing
