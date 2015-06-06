@@ -24,7 +24,7 @@
 
 #import "OTCTweet.h"
 
-@interface OTCTweet ( _OTCTweetPrivateInterfaces )
+@interface OTCTweet ( OTCMutableTweet )
 
 /** Indicates whether this Tweet has been favorited by the authenticating user. 
   */

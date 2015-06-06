@@ -23,6 +23,7 @@
   ██████████████████████████████████████████████████████████████████████████████████████████████*/
 
 #import "OTCTweet.h"
+#import "OTCMutableTweet.h"
 #import "OTCHashtag.h"
 #import "OTCFinancialSymbol.h"
 #import "OTCEmbeddedURL.h"
@@ -33,7 +34,6 @@
 #import "NSDate+WSCCocoaDate.h"
 
 #import "_OTCGeneral.h"
-#import "_OTCTweet.h"
 
 @implementation OTCTweet
 

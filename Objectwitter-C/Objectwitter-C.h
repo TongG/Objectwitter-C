@@ -25,6 +25,7 @@
 #import "STTwitter.h"
 
 #import "OTCTweet.h"
+#import "OTCMutableTweet.h"
 #import "OTCList.h"
 #import "OTCDirectMessage.h"
 #import "OTCTwitterUser.h"
