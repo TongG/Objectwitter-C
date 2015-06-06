@@ -33,6 +33,7 @@
 #import "NSDate+WSCCocoaDate.h"
 
 #import "_OTCGeneral.h"
+#import "_OTCTweet.h"
 
 @implementation OTCTweet
 
@@ -43,9 +44,9 @@
 @synthesize tweetID = _tweetID;
 
 #pragma mark Actions
-@synthesize isFavoritedByMe = _isFavoritedByMe;
+@dynamic isFavoritedByMe;
 @synthesize favoriteCount = _favoriteCount;
-@synthesize isRetweetedByMe = _isRetweetedByMe;
+@dynamic isRetweetedByMe;
 @synthesize retweetCount = _retweetCount;
 
 #pragma mark Content
@@ -168,6 +169,26 @@
         }
 
     return self;
+    }
+
+- ( BOOL ) isFavoritedByMe
+    {
+    return self->_isFavoritedByMe;
+    }
+
+- ( void ) setFavoritedByMe: ( BOOL )_YesOrNo
+    {
+    self->_isFavoritedByMe = _YesOrNo;
+    }
+
+- ( BOOL ) isRetweetedByMe
+    {
+    return self->_isRetweetedByMe;
+    }
+
+- ( void ) setRetweetedByMe: ( BOOL )_YesOrNo
+    {
+    self->_isRetweetedByMe = _YesOrNo;
     }
 
 #pragma mark Comparing

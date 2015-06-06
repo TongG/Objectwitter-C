@@ -22,26 +22,19 @@
   ████████████████████████████████████████████████████████████████████████████████████████████████
   ██████████████████████████████████████████████████████████████████████████████████████████████*/
 
-#import "STTwitter.h"
-
 #import "OTCTweet.h"
-#import "OTCList.h"
-#import "OTCDirectMessage.h"
-#import "OTCTwitterUser.h"
-#import "OTCStreamingEvent.h"
 
-#import "OTCResolvedObject.h"
-    #import "OTCUserMention.h"
-    #import "OTCEmbeddedURL.h"
-        #import "OTCMedia.h"
-    #import "OTCHashtag.h"
-    #import "OTCFinancialSymbol.h"
+@interface OTCTweet ( _OTCTweetPrivateInterfaces )
 
-#import "OTCPlace.h"
+/** Indicates whether this Tweet has been favorited by the authenticating user. 
+  */
+@property ( assign, readwrite, setter = setFavoritedByMe: ) BOOL isFavoritedByMe;
 
-#import "NSColor+Objectwitter-C.h"
-#import "NSDate+WSCCocoaDate.h"
-#import "NSURL+Objectwitter-C.h"
+/** Indicates whether this Tweet has been retweeted by the authenticating user.
+  */
+@property ( assign, readwrite, setter = setRetweetedByMe: ) BOOL isRetweetedByMe;
+
+@end
 
 /*=============================================================================================┐
 |                                                                                              |
