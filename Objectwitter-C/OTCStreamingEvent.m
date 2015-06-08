@@ -174,6 +174,9 @@
         else if ( [ eventNameParsedOutOfJSON isEqualToString: @"list_user_unsubscribed" ] )
             type = OTCStreamingEventTypeListUserUnsubscribed;
 
+        else if ( [ eventNameParsedOutOfJSON isEqualToString: @"quoted_tweet" ] )
+            type = OTCStreamingEventTypeQuotedTweet;
+
         else if ( [ eventNameParsedOutOfJSON isEqualToString: @"user_update" ] )
             type = OTCStreamingEventTypeUserUpdate;
         }
@@ -231,6 +234,9 @@
             break;
         case OTCStreamingEventTypeListUserUnsubscribed:
             stringRepresentation = @"OTCStreamingEventTypeListUserUnsubscribed";
+            break;
+        case OTCStreamingEventTypeQuotedTweet:
+            stringRepresentation = @"OTCStreamingEventTypeQuotedTweet";
             break;
         case OTCStreamingEventTypeUserUpdate:
             stringRepresentation = @"OTCStreamingEventTypeUserUpdate";
