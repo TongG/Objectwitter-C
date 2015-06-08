@@ -1987,6 +1987,59 @@ authenticateInsteadOfAuthorize:(BOOL)authenticateInsteadOfAuthorize // use NO if
                                                successBlock:(void(^)(NSDictionary *imageDictionary, NSString *mediaID, NSString *size))successBlock
                                                  errorBlock:(void(^)(NSError *error))errorBlock;
 
+/*
+ The maximum file size is 15MB and is checked during the upload process
+ The maximum length is 30 seconds and is checked when Tweeting with a video media_id
+ One video (or animated GIF) media_id can be added to a Tweet. Photos are the only media type that can be added up to four times.
+ */
+
+- (NSObject<STTwitterRequestProtocol> *)postMediaUploadINITWithVideoURL:(NSURL *)videoMediaURL
+                                                           successBlock:(void(^)(NSString *mediaID, NSString *expiresAfterSecs))successBlock
+                                                             errorBlock:(void(^)(NSError *error))errorBlock;
+
+- (NSObject<STTwitterRequestProtocol> *)postMediaUploadAPPENDWithVideoURL:(NSURL *)videoMediaURL
+                                                                  mediaID:(NSString *)mediaID
+                                                      uploadProgressBlock:(void(^)(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite))uploadProgressBlock
+                                                             successBlock:(void(^)(id response))successBlock
+                                                               errorBlock:(void(^)(NSError *error))errorBlock;
+
+- (NSObject<STTwitterRequestProtocol> *)postMediaUploadFINALIZEWithMediaID:(NSString *)mediaID
+                                                              successBlock:(void(^)(NSString *mediaID, NSString *size, NSString *expiresAfter, NSString *videoType))successBlock
+                                                                errorBlock:(void(^)(NSError *error))errorBlock;
+
+// convenience
+
+//    NSURL *videoURL = [NSURL fileURLWithPath:@"/Users/nst/Desktop/x.mov"];
+//
+//    [_twitter postMediaUploadThreeStepsWithVideoURL:videoURL
+//                                uploadProgressBlock:^(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite) {
+//                                    NSLog(@"-- %ld", (long)bytesWritten);
+//                                } successBlock:^(NSString *mediaID, NSString *size, NSString *expiresAfter, NSString *videoType) {
+//                                    NSLog(@"-- %@", mediaID);
+//
+//                                    [_twitter postStatusUpdate:@"coucou"
+//                                             inReplyToStatusID:nil
+//                                                      mediaIDs:@[mediaID]
+//                                                      latitude:nil
+//                                                     longitude:nil
+//                                                       placeID:nil
+//                                            displayCoordinates:nil
+//                                                      trimUser:nil
+//                                                  successBlock:^(NSDictionary *status) {
+//                                                      NSLog(@"-- %@", status);
+//                                                  } errorBlock:^(NSError *error) {
+//                                                      NSLog(@"-- %@", error);
+//                                                  }];
+//
+//                                } errorBlock:^(NSError *error) {
+//                                    NSLog(@"-- %@", error);
+//                                }];
+
+- (void)postMediaUploadThreeStepsWithVideoURL:(NSURL *)videoURL // local URL
+                          uploadProgressBlock:(void(^)(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite))uploadProgressBlock
+                                 successBlock:(void(^)(NSString *mediaID, NSString *size, NSString *expiresAfter, NSString *videoType))successBlock
+                                   errorBlock:(void(^)(NSError *error))errorBlock;
+
 #pragma mark -
 #pragma mark UNDOCUMENTED APIs
 

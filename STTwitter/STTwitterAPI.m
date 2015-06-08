@@ -234,7 +234,7 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
     STTwitterAPI * __weak weakSelf = self;
     
     [_oauth verifyCredentialsLocallyWithSuccessBlock:^(NSString *username, NSString *userID) {
-
+        
         typeof(self) strongSelf = weakSelf;
         if(strongSelf == nil) return;
         
@@ -253,7 +253,7 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
         } errorBlock:^(NSError *error) {
             errorBlock(error);
         }];
-
+        
     } errorBlock:^(NSError *error) {
         errorBlock(error); // early, local detection of account issues, eg. incomplete OS account
     }];
@@ -4258,8 +4258,170 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
                      NSString *size = [response valueForKey:@"size"];
                      
                      successBlock(imageDictionary, mediaID, size);
-                 }
-                   errorBlock:errorBlock];
+                 } errorBlock:^(NSError *error) {
+                     errorBlock(error);
+                 }];
+}
+
+- (NSObject<STTwitterRequestProtocol> *)postMediaUploadINITWithVideoURL:(NSURL *)videoMediaURL
+                                                           successBlock:(void(^)(NSString *mediaID, NSString *expiresAfterSecs))successBlock
+                                                             errorBlock:(void(^)(NSError *error))errorBlock {
+    
+    // https://dev.twitter.com/rest/public/uploading-media
+    
+    NSData *data = [NSData dataWithContentsOfURL:videoMediaURL];
+    
+    if(data == nil) {
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class])
+                                             code:STTwitterAPIMediaDataIsEmpty
+                                         userInfo:@{NSLocalizedDescriptionKey : @"data is nil"}];
+        errorBlock(error);
+        return nil;
+    }
+    
+    NSMutableDictionary *md = [NSMutableDictionary dictionary];
+    md[@"command"] = @"INIT";
+    md[@"media_type"] = @"video/mp4";
+    md[@"total_bytes"] = [NSString stringWithFormat:@"%lu", [data length]];
+    
+    return [self postResource:@"media/upload.json"
+                baseURLString:kBaseURLStringUpload_1_1
+                   parameters:md
+          uploadProgressBlock:nil
+        downloadProgressBlock:nil
+                 successBlock:^(NSDictionary *rateLimits, id response) {
+                     
+                     /*
+                      {
+                      "expires_after_secs" = 3599;
+                      "media_id" = 605333580483575808;
+                      "media_id_string" = 605333580483575808;
+                      }
+                      */
+                     
+                     NSString *mediaID = [response valueForKey:@"media_id_string"];
+                     NSString *expiresAfterSecs = [response valueForKey:@"expires_after_secs"];
+                     
+                     successBlock(mediaID, expiresAfterSecs);
+                 } errorBlock:^(NSError *error) {
+                     errorBlock(error);
+                 }];
+}
+
+- (NSObject<STTwitterRequestProtocol> *)postMediaUploadAPPENDWithVideoURL:(NSURL *)videoMediaURL
+                                                                  mediaID:(NSString *)mediaID
+                                                      uploadProgressBlock:(void(^)(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite))uploadProgressBlock
+                                                             successBlock:(void(^)(id response))successBlock
+                                                               errorBlock:(void(^)(NSError *error))errorBlock {
+    
+    // https://dev.twitter.com/rest/public/uploading-media
+    
+    NSData *data = [NSData dataWithContentsOfURL:videoMediaURL];
+    
+    if(data == nil) {
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:STTwitterAPIMediaDataIsEmpty userInfo:@{NSLocalizedDescriptionKey : @"data is nil"}];
+        errorBlock(error);
+        return nil;
+    }
+    
+    NSString *fileName = [videoMediaURL isFileURL] ? [[videoMediaURL path] lastPathComponent] : @"media.jpg";
+    
+    NSMutableDictionary *md = [NSMutableDictionary dictionary];
+    md[@"command"] = @"APPEND";
+    md[@"media_id"] = mediaID;
+    md[@"segment_index"] = @"0";
+    md[@"media"] = data;
+    md[kSTPOSTDataKey] = @"media";
+    md[kSTPOSTMediaFileNameKey] = fileName;
+    
+    return [self postResource:@"media/upload.json"
+                baseURLString:kBaseURLStringUpload_1_1
+                   parameters:md
+          uploadProgressBlock:uploadProgressBlock
+        downloadProgressBlock:nil
+                 successBlock:^(NSDictionary *rateLimits, id response) {
+                     successBlock(response);
+                 } errorBlock:^(NSError *error) {
+                     errorBlock(error);
+                 }];
+}
+
+- (NSObject<STTwitterRequestProtocol> *)postMediaUploadFINALIZEWithMediaID:(NSString *)mediaID
+                                                              successBlock:(void(^)(NSString *mediaID, NSString *size, NSString *expiresAfter, NSString *videoType))successBlock
+                                                                errorBlock:(void(^)(NSError *error))errorBlock {
+    
+    // https://dev.twitter.com/rest/public/uploading-media
+    
+    NSMutableDictionary *md = [NSMutableDictionary dictionary];
+    md[@"command"] = @"FINALIZE";
+    md[@"media_id"] = mediaID;
+    
+    return [self postResource:@"media/upload.json"
+                baseURLString:kBaseURLStringUpload_1_1
+                   parameters:md
+          uploadProgressBlock:nil
+        downloadProgressBlock:nil
+                 successBlock:^(NSDictionary *rateLimits, id response) {
+                     
+                     //NSLog(@"-- %@", response);
+                     
+                     NSString *mediaID = [response valueForKey:@"media_id"];
+                     NSString *expiresAfterSecs = [response valueForKey:@"expires_after_secs"];
+                     NSString *size = [response valueForKey:@"size"];
+                     NSString *videoType = [response valueForKeyPath:@"video.video_type"];
+                     
+                     /*
+                      {
+                      "expires_after_secs" = 3600;
+                      "media_id" = 607552320679706624;
+                      "media_id_string" = 607552320679706624;
+                      size = 992496;
+                      video =     {
+                      "video_type" = "video/mp4";
+                      };
+                      }
+                      */
+                     
+                     successBlock(mediaID, size, expiresAfterSecs, videoType);
+                 } errorBlock:^(NSError *error) {
+                     errorBlock(error);
+                 }];
+}
+
+// convenience
+
+- (void)postMediaUploadThreeStepsWithVideoURL:(NSURL *)videoURL // local URL
+                          uploadProgressBlock:(void(^)(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite))uploadProgressBlock
+                                 successBlock:(void(^)(NSString *mediaID, NSString *size, NSString *expiresAfter, NSString *videoType))successBlock
+                                   errorBlock:(void(^)(NSError *error))errorBlock {
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [self postMediaUploadINITWithVideoURL:videoURL
+                             successBlock:^(NSString *mediaID, NSString *expiresAfterSecs) {
+                                 
+                                 __strong typeof(self) strongSelf = weakSelf;
+                                 if(strongSelf == nil) {
+                                     errorBlock(nil);
+                                     return;
+                                 }
+                                 
+                                 [strongSelf postMediaUploadAPPENDWithVideoURL:videoURL
+                                                                       mediaID:mediaID
+                                                           uploadProgressBlock:uploadProgressBlock
+                                                                  successBlock:^(id response) {
+                                                                      
+                                                                      __strong typeof(self) strongSelf2 = weakSelf;
+                                                                      if(strongSelf2 == nil) {
+                                                                          errorBlock(nil);
+                                                                          return;
+                                                                      }
+                                                                      
+                                                                      [strongSelf2 postMediaUploadFINALIZEWithMediaID:mediaID
+                                                                                                         successBlock:successBlock
+                                                                                                           errorBlock:errorBlock];
+                                                                  } errorBlock:errorBlock];
+                             } errorBlock:errorBlock];
 }
 
 #pragma mark -
