@@ -20,15 +20,20 @@ NSUInteger mapHexAlphaToDecimalNumeric( NSString* _AlphaInHexNumeric );
     {
     NSColor* color = nil;
 
-    NSString* redValueInHex = [ @"0x" stringByAppendingString: [ _HTMLColor substringWithRange: NSMakeRange( 0, 2 ) ] ];
-    NSString* greenValueInHex = [ @"0x" stringByAppendingString: [ _HTMLColor substringWithRange: NSMakeRange( 2, 2 ) ] ];
-    NSString* blueValueInHex = [ @"0x" stringByAppendingString: [ _HTMLColor substringWithRange: NSMakeRange( 4, 2 ) ] ];
+    if ( _HTMLColor )
+        {
+        NSString* redValueInHex = [ @"0x" stringByAppendingString: [ _HTMLColor substringWithRange: NSMakeRange( 0, 2 ) ] ];
+        NSString* greenValueInHex = [ @"0x" stringByAppendingString: [ _HTMLColor substringWithRange: NSMakeRange( 2, 2 ) ] ];
+        NSString* blueValueInHex = [ @"0x" stringByAppendingString: [ _HTMLColor substringWithRange: NSMakeRange( 4, 2 ) ] ];
 
-    NSUInteger redValue = OMCOperandConvertHexToDecimal( redValueInHex );
-    NSUInteger greenValue = OMCOperandConvertHexToDecimal( greenValueInHex );
-    NSUInteger blueValue = OMCOperandConvertHexToDecimal( blueValueInHex );
+        NSUInteger redValue = OMCOperandConvertHexToDecimal( redValueInHex );
+        NSUInteger greenValue = OMCOperandConvertHexToDecimal( greenValueInHex );
+        NSUInteger blueValue = OMCOperandConvertHexToDecimal( blueValueInHex );
 
-    color = [ NSColor colorWithSRGBRed: redValue / 255.f green: greenValue / 255.f blue: blueValue / 255.f alpha: 1.f ];
+        color = [ NSColor colorWithSRGBRed: redValue / 255.f green: greenValue / 255.f blue: blueValue / 255.f alpha: 1.f ];
+        }
+    else
+        color = [ NSColor whiteColor ];
 
     return color;
     }
