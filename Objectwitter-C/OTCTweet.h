@@ -33,6 +33,7 @@ typedef NS_ENUM( NSUInteger,  OTCTweetType )
     , OTCTweetTypeRetweet       = 2
     , OTCTweetTypeReply         = 3
     , OTCTweetTypeDirectMessage = 4
+    , OTCTweetTypeQuotedTweet   = 5
     };
 
 /** Tweets are the basic atomic building block of all things Twitter. 
