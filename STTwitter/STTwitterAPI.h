@@ -19,7 +19,7 @@
 //  Copyright (c) 2012 Nicolas Seriot. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 #import "STTwitterStreamParser.h"
 #import "STTwitterRequestProtocol.h"
 #import "OTCSTTwitterStreamingAPIDelegate.h"

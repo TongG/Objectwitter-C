@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Nicolas Seriot. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 #import "STTwitterRequestProtocol.h"
 
 @class ACAccount;

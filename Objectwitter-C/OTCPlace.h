@@ -22,7 +22,7 @@
   ████████████████████████████████████████████████████████████████████████████████████████████████
   ██████████████████████████████████████████████████████████████████████████████████████████████*/
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 NSString extern* const OTCPlaceTypeOther;
 NSString extern* const OTCPlaceTypeCountry;

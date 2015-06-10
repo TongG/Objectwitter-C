@@ -23,7 +23,7 @@
   ██████████████████████████████████████████████████████████████████████████████*/
 
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 #pragma mark NSDate+WSCCocoaDate
 @interface NSDate ( _WSCocoaDate )

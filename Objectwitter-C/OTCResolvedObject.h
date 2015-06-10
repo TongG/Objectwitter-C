@@ -22,7 +22,7 @@
   ████████████████████████████████████████████████████████████████████████████████████████████████
   ██████████████████████████████████████████████████████████████████████████████████████████████*/
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 /** The `OTCResolvedObject` defines the basic property of an resolved object.
   

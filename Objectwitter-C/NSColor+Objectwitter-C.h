@@ -6,7 +6,7 @@
 //
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 @interface NSColor ( Objectwitter_C )
 + ( NSColor* ) colorWithHTMLColor: ( NSString* )_HTMLColor;
