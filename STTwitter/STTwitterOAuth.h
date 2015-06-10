@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Nicolas Seriot. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 #import "STTwitterProtocol.h"
 
 /*

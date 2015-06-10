@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Nicolas Seriot. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 static NSString *kSTTwitterTwitterErrorDomain = @"STTwitterTwitterErrorDomain";
 static NSString *kSTTwitterRateLimitLimit = @"STTwitterRateLimitLimit";

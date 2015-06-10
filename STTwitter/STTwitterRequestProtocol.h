@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 Nicolas Seriot. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 @protocol STTwitterRequestProtocol <NSObject>
 

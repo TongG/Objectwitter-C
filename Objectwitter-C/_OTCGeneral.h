@@ -22,7 +22,7 @@
   ████████████████████████████████████████████████████████████████████████████████████████████████
   ██████████████████████████████████████████████████████████████████████████████████████████████*/
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 id _OTCCocoaValueWhichHasBeenParsedOutOfJSON( NSDictionary* _JSONObject, NSString* _JSONPropertyKey );
 NSUInteger _OTCSInt64WhichHasBeenParsedOutOfJSON( NSDictionary* _JSONObject, NSString* _JSONPropertyKey );

@@ -6,7 +6,7 @@
 //  Copyright 2010 seriot.ch. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 #import "STTwitterProtocol.h"
 
 extern NS_ENUM(NSUInteger, STTwitterOSErrorCode) {
