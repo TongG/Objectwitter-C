@@ -40,6 +40,7 @@
 
     NSString* _displayName;
     NSString* _screenName;
+    NSString* _rawScreenName;
 
     BOOL _isContributorsEnabled;
     BOOL _isProtected;
@@ -123,6 +124,12 @@
               Typically a maximum of 15 characters long, but some historical accounts may exist with longer names.
   */
 @property ( copy, readonly ) NSString* screenName;
+
+/** The raw screen name parsed out of the JSON rep of `User` object.
+  
+  @discusstion For example, my Twitter secreen name: @NSTongG, "NSTongG" is its raw rep.
+  */
+@property ( copy, readonly ) NSString* rawScreenName;
 
 /** Indicates that the user has an account with “contributor mode” enabled,
     allowing for Tweets issued by the user to be co-authored by another account. 

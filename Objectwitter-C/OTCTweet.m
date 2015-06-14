@@ -166,6 +166,9 @@
             self->_type = OTCTweetTypeReply;
         else
             self->_type = OTCTweetTypeNormalTweet;
+
+        self->_URLOnWeb = [ NSURL URLWithString:
+            [ NSString stringWithFormat: @"https://twitter.com/%@/status/%@", self->_author.rawScreenName, self->_tweetIDString ] ];
         }
 
     return self;

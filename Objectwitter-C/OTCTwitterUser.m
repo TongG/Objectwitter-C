@@ -111,8 +111,8 @@
 
         self->_displayName = [ _OTCCocoaValueWhichHasBeenParsedOutOfJSON( self->_JSONObject, @"name" ) copy ];
 
-        NSString* tmpScreenName = _OTCCocoaValueWhichHasBeenParsedOutOfJSON( self->_JSONObject, @"screen_name" );
-        self->_screenName = tmpScreenName ? [ @"@" stringByAppendingString: tmpScreenName ] : nil;
+        self->_rawScreenName = [ _OTCCocoaValueWhichHasBeenParsedOutOfJSON( self->_JSONObject, @"screen_name" ) copy ];
+        self->_screenName = self->_rawScreenName ? [ @"@" stringByAppendingString: self->_rawScreenName ] : nil;
 
         self->_isContributorsEnabled = _OTCBooleanWhichHasBeenParsedOutOfJSON( self->_JSONObject, @"contributors_enabled" );
         self->_isProtected = _OTCBooleanWhichHasBeenParsedOutOfJSON( self->_JSONObject, @"protected" );
