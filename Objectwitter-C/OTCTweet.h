@@ -49,6 +49,7 @@ typedef NS_ENUM( NSUInteger,  OTCTweetType )
     // Identifier
     NSString* _tweetIDString;
     SInt64 _tweetID;
+    NSURL __strong* _URLOnWeb;
 
     // Actions
     BOOL _isFavoritedByMe;
@@ -109,6 +110,12 @@ typedef NS_ENUM( NSUInteger,  OTCTweetType )
               Use `tweetIDString` for fetching the identifier to stay on the safe side.
   */
 @property ( assign, readonly ) SInt64 tweetID;
+
+/** The URL of Web representation of this Tweet.
+
+  @discusstion Like this: https://twitter.com/NSTongG/status/605792338812600320
+  */
+@property ( strong, readonly ) NSURL* URLOnWeb;
 
 #pragma mark Actions
 /** Indicates whether this Tweet has been favorited by the authenticating user. */
