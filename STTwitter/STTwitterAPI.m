@@ -65,7 +65,7 @@ static NSDateFormatter *dateFormatter = nil;
 }
 
 + (NSString *)versionString {
-    return @"0.2.0";
+    return @"0.2.1";
 }
 
 + (instancetype)twitterAPIOSWithAccount:(ACAccount *)account {
@@ -231,20 +231,25 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
 
 - (void)verifyCredentialsWithUserSuccessBlock:(void(^)(NSString *username, NSString *userID))successBlock errorBlock:(void(^)(NSError *error))errorBlock {
     
-    STTwitterAPI * __weak weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     
     [_oauth verifyCredentialsLocallyWithSuccessBlock:^(NSString *username, NSString *userID) {
         
-        typeof(self) strongSelf = weakSelf;
-        if(strongSelf == nil) return;
+        __strong typeof(self) strongSelf = weakSelf;
+        if(strongSelf == nil) {
+            errorBlock(nil);
+            return;
+        }
         
         if(username) [strongSelf setUserName:username];
         if(userID) [strongSelf setUserID:userID];
         
         [_oauth verifyCredentialsRemotelyWithSuccessBlock:^(NSString *username, NSString *userID) {
-            
-            typeof(self) strongSelf = weakSelf;
-            if(strongSelf == nil) return;
+
+            if(strongSelf == nil) {
+                errorBlock(nil);
+                return;
+            }
             
             [strongSelf setUserName:username];
             [strongSelf setUserID:userID];
@@ -4282,7 +4287,7 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
     NSMutableDictionary *md = [NSMutableDictionary dictionary];
     md[@"command"] = @"INIT";
     md[@"media_type"] = @"video/mp4";
-    md[@"total_bytes"] = [NSString stringWithFormat:@"%lu", [data length]];
+    md[@"total_bytes"] = [NSString stringWithFormat:@"%@", @([data length])];
     
     return [self postResource:@"media/upload.json"
                 baseURLString:kBaseURLStringUpload_1_1
