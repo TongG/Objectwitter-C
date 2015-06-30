@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Nicolas Seriot. All rights reserved.
 //
 
+#import <objc/message.h>
+
 #import "STTwitterAPI.h"
 #import "STTwitterOS.h"
 #import "STTwitterOAuth.h"
@@ -15,6 +17,7 @@
 #import "STHTTPRequest.h"
 #import "STHTTPRequest+STTwitter.h"
 #import "Objectwitter-C.h"
+#import "OTCSTTwitterStreamingAPIDelegate.h"
 
 NSString *kBaseURLStringAPI_1_1 = @"https://api.twitter.com/1.1";
 NSString *kBaseURLStringUpload_1_1 = @"https://upload.twitter.com/1.1";
@@ -39,9 +42,15 @@ static NSDateFormatter *dateFormatter = nil;
 @end // STTwitterAPI + OTCSTTwitterStreamingAPIDelegate
 
 @implementation STTwitterAPI
+    {
+@protected
+    BOOL _hasStreamConnection;
+    }
 
 - (id)init {
     self = [super init];
+
+    self->_hasStreamConnection = NO;
     
     STTwitterAPI * __weak weakSelf = self;
     
@@ -1340,6 +1349,18 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
                    parameters:md
           uploadProgressBlock:nil
         downloadProgressBlock:^(NSData *data) {
+            if ( !self->_hasStreamConnection )
+                {
+                self->_hasStreamConnection = YES;
+                NSLog( @"Successfully established filter stream: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] );
+
+                if ( [ self.delegate conformsToProtocol: @protocol( OTCSTTwitterStreamingAPIDelegate ) ] )
+                    {
+                    SEL delegateSEL = @selector( twitterAPI:stream:hasBeenEstablished: );
+                    if ( [ self.delegate respondsToSelector: delegateSEL ] )
+                        objc_msgSend( self.delegate, delegateSEL, self, STTwitterAPIStreamTypeFilterStream, data );
+                    }
+                }
             
             if (streamParser) {
                 [streamParser parseWithStreamData:data parsedJSONBlock:^(NSDictionary *json, STTwitterStreamJSONType type) {
@@ -1357,6 +1378,7 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
             // reaching successBlock for a stream request is an error
             errorBlock(response);
         } errorBlock:^(NSError *error) {
+                self->_hasStreamConnection = NO;
             errorBlock(error);
         }];
 }
@@ -1511,7 +1533,19 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
                baseURLString:kBaseURLStringUserStream_1_1
                   parameters:md
        downloadProgressBlock:^(id response) {
-           
+            if ( !self->_hasStreamConnection )
+                {
+                NSLog( @"Successfully established user stream" );
+                self->_hasStreamConnection = YES;
+
+                if ( [ self.delegate conformsToProtocol: @protocol( OTCSTTwitterStreamingAPIDelegate ) ] )
+                    {
+                    SEL delegateSEL = @selector( twitterAPI:stream:hasBeenEstablished: );
+                    if ( [ self.delegate respondsToSelector: delegateSEL ] )
+                        objc_msgSend( self.delegate, delegateSEL, self, STTwitterAPIStreamTypeUserStream, response );
+                    }
+                }
+
            if (streamParser) {
                [streamParser parseWithStreamData:response parsedJSONBlock:^(NSDictionary *json, STTwitterStreamJSONType type) {
                    progressBlock(json, type);
@@ -1522,6 +1556,7 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
            // reaching successBlock for a stream request is an error
            errorBlock(json);
        } errorBlock:^(NSError *error) {
+            self->_hasStreamConnection = NO;
            errorBlock(error);
        }];
 }
@@ -1541,9 +1576,7 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
                                progressBlock:
         ^( NSDictionary* _JSON, STTwitterStreamJSONType _Type )
             {
-            [ [ self _streamingAPIDelegateInvocationGenerator: _JSON
-                                                  messageType: _Type
-                                                  streamError: nil] invoke ];
+            [ [ self _streamingAPIDelegateInvocationGenerator: _JSON messageType: _Type streamError: nil] invoke ];
             } errorBlock: ^( NSError* _Error )
                             {
                             [ [ self _streamingAPIDelegateInvocationGenerator: nil messageType: 0 streamError: _Error] invoke ];
@@ -1575,20 +1608,22 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
     return [self getResource:@"site.json"
                baseURLString:kBaseURLStringSiteStream_1_1
                   parameters:md
-       downloadProgressBlock:^(NSData *data) {
-           
-           if (streamParser) {
-               [streamParser parseWithStreamData:data parsedJSONBlock:^(NSDictionary *json, STTwitterStreamJSONType type) {
-                   progressBlock(json, type);
-               }];
-           }
-           
-       } successBlock:^(NSDictionary *rateLimits, id json) {
-           // reaching successBlock for a stream request is an error
-           errorBlock(json);
-       } errorBlock:^(NSError *error) {
-           errorBlock(error);
-       }];
+       downloadProgressBlock:
+        ^( NSData* data )
+            {
+            if ( streamParser )
+                {
+                [ streamParser parseWithStreamData: data parsedJSONBlock:
+                    ^( NSDictionary* json, STTwitterStreamJSONType type )
+                        { progressBlock( json, type); } ];
+                }
+            } successBlock:
+                ^( NSDictionary* rateLimits, id json )
+                    {
+                    // reaching successBlock for a stream request is an error
+                    errorBlock( json );
+                    } errorBlock:
+                        ^( NSError* error ) { errorBlock( error ); } ];
 }
 
 // convenience
@@ -1605,9 +1640,7 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
                             progressBlock:
         ^( NSDictionary* _JSON, STTwitterStreamJSONType _Type )
             {
-            [ self _streamingAPIDelegateInvocationGenerator: _JSON
-                                                messageType: _Type
-                                                streamError: nil ];
+            [ self _streamingAPIDelegateInvocationGenerator: _JSON messageType: _Type streamError: nil ];
             } errorBlock: ^( NSError* _Error )
                             {
                             [ [ self _streamingAPIDelegateInvocationGenerator: nil messageType: 0 streamError: _Error] invoke ];
