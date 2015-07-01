@@ -1352,8 +1352,6 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
             if ( !self->_hasStreamConnection )
                 {
                 self->_hasStreamConnection = YES;
-                NSLog( @"Successfully established filter stream: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] );
-
                 if ( [ self.delegate conformsToProtocol: @protocol( OTCSTTwitterStreamingAPIDelegate ) ] )
                     {
                     SEL delegateSEL = @selector( twitterAPI:stream:hasBeenEstablished: );
@@ -1370,6 +1368,7 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
             
         } successBlock:^(NSDictionary *rateLimits, id response) {
             if([response isKindOfClass:[NSString class]] && [response length] == 0) {
+                self->_hasStreamConnection = NO;
                 NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:STTwitterAPIEmptyStream userInfo:@{NSLocalizedDescriptionKey : @"stream is empty"}];
                 errorBlock(error);
                 return;
@@ -1378,7 +1377,7 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
             // reaching successBlock for a stream request is an error
             errorBlock(response);
         } errorBlock:^(NSError *error) {
-                self->_hasStreamConnection = NO;
+            self->_hasStreamConnection = NO;
             errorBlock(error);
         }];
 }
@@ -1535,7 +1534,6 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
        downloadProgressBlock:^(id response) {
             if ( !self->_hasStreamConnection )
                 {
-                NSLog( @"Successfully established user stream" );
                 self->_hasStreamConnection = YES;
 
                 if ( [ self.delegate conformsToProtocol: @protocol( OTCSTTwitterStreamingAPIDelegate ) ] )
@@ -1554,6 +1552,7 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
            
        } successBlock:^(NSDictionary *rateLimits, id json) {
            // reaching successBlock for a stream request is an error
+           self->_hasStreamConnection = NO;
            errorBlock(json);
        } errorBlock:^(NSError *error) {
             self->_hasStreamConnection = NO;
