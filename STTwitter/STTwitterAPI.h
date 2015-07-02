@@ -22,7 +22,8 @@
 @import Foundation;
 #import "STTwitterStreamParser.h"
 #import "STTwitterRequestProtocol.h"
-#import "OTCSTTwitterStreamingAPIDelegate.h"
+
+@protocol OTCSTTwitterStreamingAPIDelegate;
 
 @class OTCTweet;
 @class OTCStreamingEvent;
@@ -32,6 +33,16 @@ extern NS_ENUM(NSUInteger, STTwitterAPIErrorCode) {
     STTwitterAPIMediaDataIsEmpty,
     STTwitterAPIEmptyStream
 };
+
+typedef NS_ENUM( NSUInteger, STTwitterAPIStreamType )
+    { STTwitterAPIStreamTypeSampleStream = 0
+    , STTwitterAPIStreamTypeFilterStream = 1
+    , STTwitterAPIStreamTypeUserStream = 2
+    , STTwitterAPIStreamTypeSiteStream = 3
+    , STTwitterAPIStreamTypeFirehose = 4
+
+    , STTwitterAPIStreamTypeUnknown = -1
+    };
 
 extern NSString *kBaseURLStringAPI_1_1;
 extern NSString *kBaseURLStringStream_1_1;

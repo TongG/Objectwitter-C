@@ -22,7 +22,7 @@
   ████████████████████████████████████████████████████████████████████████████████████████████████
   ██████████████████████████████████████████████████████████████████████████████████████████████*/
 
-@import Foundation;
+#import "STTwitterAPI.h"
 
 @class STTwitterAPI;
 @class OTCTweet;
@@ -32,6 +32,8 @@
 @protocol OTCSTTwitterStreamingAPIDelegate <NSObject>
 
 @optional
+- ( void ) twitterAPI: ( STTwitterAPI* )_TwitterAPI stream: ( STTwitterAPIStreamType )_StreamType hasBeenEstablished: ( NSData* )_FirstTimeTransaction;
+
 - ( void ) twitterAPI: ( STTwitterAPI* )_TwitterAPI didReceiveFriendsLists: ( NSArray* )_Friends;
 - ( void ) twitterAPI: ( STTwitterAPI* )_TwitterAPI didReceiveTweet: ( OTCTweet* )_ReceivedTweet;
 - ( void ) twitterAPI: ( STTwitterAPI* )_TwitterAPI sentOrReceivedDM: ( OTCDirectMessage* )_DirectMessage;
