@@ -1368,9 +1368,7 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
             
         } successBlock:^(NSDictionary *rateLimits, id response) {
             self->_hasStreamConnection = NO;
-            NSLog( @"Outside😤" );
             if([response isKindOfClass:[NSString class]] && [response length] == 0) {
-                NSLog( @"Inside😗" );
                 NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:STTwitterAPIEmptyStream userInfo:@{NSLocalizedDescriptionKey : @"stream is empty"}];
                 errorBlock(error);
                 return;
