@@ -254,7 +254,7 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
         if(userID) [strongSelf setUserID:userID];
         
         [_oauth verifyCredentialsRemotelyWithSuccessBlock:^(NSString *username, NSString *userID) {
-
+            
             if(strongSelf == nil) {
                 errorBlock(nil);
                 return;
@@ -1651,6 +1651,7 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
 - (NSObject<STTwitterRequestProtocol> *)getDirectMessagesSinceID:(NSString *)sinceID
                                                            maxID:(NSString *)maxID
                                                            count:(NSString *)count
+                                                        fullText:(NSNumber *)fullText
                                                  includeEntities:(NSNumber *)includeEntities
                                                       skipStatus:(NSNumber *)skipStatus
                                                     successBlock:(void(^)(NSArray *messages))successBlock
@@ -1660,6 +1661,7 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
     if(sinceID) [md setObject:sinceID forKey:@"since_id"];
     if(maxID) [md setObject:maxID forKey:@"max_id"];
     if(count) [md setObject:count forKey:@"count"];
+    if(fullText) md[@"full_text"] = [fullText boolValue] ? @"1" : @"0";
     if(includeEntities) md[@"include_entities"] = [includeEntities boolValue] ? @"1" : @"0";
     if(skipStatus) md[@"skip_status"] = [skipStatus boolValue] ? @"1" : @"0";
     
@@ -1681,6 +1683,7 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
     return [self getDirectMessagesSinceID:sinceID
                                     maxID:nil
                                     count:countString
+                                 fullText:@(1)
                           includeEntities:nil
                                skipStatus:nil
                              successBlock:^(NSArray *statuses) {
@@ -1693,6 +1696,7 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
 - (NSObject<STTwitterRequestProtocol> *)getDirectMessagesSinceID:(NSString *)sinceID
                                                            maxID:(NSString *)maxID
                                                            count:(NSString *)count
+                                                        fullText:(NSNumber *)fullText
                                                             page:(NSString *)page
                                                  includeEntities:(NSNumber *)includeEntities
                                                     successBlock:(void(^)(NSArray *messages))successBlock
@@ -1702,6 +1706,7 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
     if(sinceID) [md setObject:sinceID forKey:@"since_id"];
     if(maxID) [md setObject:maxID forKey:@"max_id"];
     if(count) [md setObject:count forKey:@"count"];
+    if(fullText) md[@"full_text"] = [fullText boolValue] ? @"1" : @"0";
     if(page) [md setObject:page forKey:@"page"];
     if(includeEntities) md[@"include_entities"] = [includeEntities boolValue] ? @"1" : @"0";
     
@@ -1713,12 +1718,15 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
 }
 
 - (NSObject<STTwitterRequestProtocol> *)getDirectMessagesShowWithID:(NSString *)messageID
+                                                           fullText:(NSNumber *)fullText
                                                        successBlock:(void(^)(NSArray *messages))successBlock
                                                          errorBlock:(void(^)(NSError *error))errorBlock {
     
-    NSDictionary *d = @{@"id" : messageID};
+    NSMutableDictionary *md = [NSMutableDictionary dictionary];
+    md[@"id"] = messageID;
+    if(fullText) md[@"full_text"] = [fullText boolValue] ? @"1" : @"0";
     
-    return [self getAPIResource:@"direct_messages/show.json" parameters:d successBlock:^(NSDictionary *rateLimits, id response) {
+    return [self getAPIResource:@"direct_messages/show.json" parameters:md successBlock:^(NSDictionary *rateLimits, id response) {
         successBlock(response);
     } errorBlock:^(NSError *error) {
         errorBlock(error);
@@ -2231,12 +2239,14 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
 // GET account/verify_credentials
 - (NSObject<STTwitterRequestProtocol> *)getAccountVerifyCredentialsWithIncludeEntites:(NSNumber *)includeEntities
                                                                            skipStatus:(NSNumber *)skipStatus
+                                                                         includeEmail:(NSNumber *)includeEmail
                                                                          successBlock:(void(^)(NSDictionary *myInfo))successBlock
                                                                            errorBlock:(void(^)(NSError *error))errorBlock {
     
     NSMutableDictionary *md = [NSMutableDictionary dictionary];
     if(includeEntities) md[@"include_entities"] = [includeEntities boolValue] ? @"1" : @"0";
     if(skipStatus) md[@"skip_status"] = [skipStatus boolValue] ? @"1" : @"0";
+    if(includeEmail) md[@"include_email"] = [skipStatus boolValue] ? @"1" : @"0";
     
     return [self getAPIResource:@"account/verify_credentials.json" parameters:md successBlock:^(NSDictionary *rateLimits, id response) {
         successBlock(response);
@@ -2247,7 +2257,7 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
 
 - (NSObject<STTwitterRequestProtocol> *)getAccountVerifyCredentialsWithSuccessBlock:(void(^)(NSDictionary *account))successBlock
                                                                          errorBlock:(void(^)(NSError *error))errorBlock {
-    return [self getAccountVerifyCredentialsWithIncludeEntites:nil skipStatus:nil successBlock:^(NSDictionary *account) {
+    return [self getAccountVerifyCredentialsWithIncludeEntites:nil skipStatus:nil includeEmail:nil successBlock:^(NSDictionary *account) {
         successBlock(account);
     } errorBlock:^(NSError *error) {
         errorBlock(error);
@@ -3056,12 +3066,28 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
 // POST lists/members/destroy
 
 - (NSObject<STTwitterRequestProtocol> *)postListsMembersDestroyForListID:(NSString *)listID
+                                                                    slug:(NSString *)slug
+                                                                  userID:(NSString *)userID
+                                                              screenName:(NSString *)screenName
+                                                         ownerScreenName:(NSString *)ownerScreenName
+                                                                 ownerID:(NSString *)ownerID
                                                             successBlock:(void(^)(id response))successBlock
                                                               errorBlock:(void(^)(NSError *error))errorBlock {
     
-    NSDictionary *d = @{ @"list_id" : listID };
+    NSAssert((listID || slug), @"missing listID or slug");
     
-    return [self postAPIResource:@"lists/members/destroy" parameters:d successBlock:^(NSDictionary *rateLimits, id response) {
+    if(slug) NSAssert((ownerScreenName || ownerID), @"slug requires either ownerScreenName or ownerID");
+    
+    NSMutableDictionary *md = [NSMutableDictionary dictionary];
+    
+    if(listID) md[@"list_id"] = listID;
+    if(slug) md[@"slug"] = slug;
+    if(userID) md[@"user_id"] = userID;
+    if(screenName) md[@"screen_name"] = screenName;
+    if(ownerScreenName) md[@"owner_screen_name"] = ownerScreenName;
+    if(ownerID) md[@"owner_id"] = ownerID;
+    
+    return [self postAPIResource:@"lists/members/destroy" parameters:md successBlock:^(NSDictionary *rateLimits, id response) {
         successBlock(response);
     } errorBlock:^(NSError *error) {
         errorBlock(error);
@@ -4345,42 +4371,95 @@ authenticateInsteadOfAuthorize:authenticateInsteadOfAuthorize
                  }];
 }
 
-- (NSObject<STTwitterRequestProtocol> *)postMediaUploadAPPENDWithVideoURL:(NSURL *)videoMediaURL
-                                                                  mediaID:(NSString *)mediaID
-                                                      uploadProgressBlock:(void(^)(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite))uploadProgressBlock
-                                                             successBlock:(void(^)(id response))successBlock
-                                                               errorBlock:(void(^)(NSError *error))errorBlock {
+- (void)postMediaUploadAPPENDWithVideoURL:(NSURL *)videoMediaURL
+                                  mediaID:(NSString *)mediaID
+                      uploadProgressBlock:(void(^)(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite))uploadProgressBlock
+                             successBlock:(void(^)(id response))successBlock
+                               errorBlock:(void(^)(NSError *error))errorBlock {
     
     // https://dev.twitter.com/rest/public/uploading-media
+    // https://dev.twitter.com/rest/reference/post/media/upload-chunked
     
     NSData *data = [NSData dataWithContentsOfURL:videoMediaURL];
     
-    if(data == nil) {
-        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:STTwitterAPIMediaDataIsEmpty userInfo:@{NSLocalizedDescriptionKey : @"data is nil"}];
+    NSInteger dataLength = [data length];
+    
+    if(dataLength == 0) {
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:STTwitterAPIMediaDataIsEmpty userInfo:@{NSLocalizedDescriptionKey : @"cannot upload empty data"}];
         errorBlock(error);
-        return nil;
+        return;
     }
     
     NSString *fileName = [videoMediaURL isFileURL] ? [[videoMediaURL path] lastPathComponent] : @"media.jpg";
     
-    NSMutableDictionary *md = [NSMutableDictionary dictionary];
-    md[@"command"] = @"APPEND";
-    md[@"media_id"] = mediaID;
-    md[@"segment_index"] = @"0";
-    md[@"media"] = data;
-    md[kSTPOSTDataKey] = @"media";
-    md[kSTPOSTMediaFileNameKey] = fileName;
+    NSUInteger fiveMegaBytes = 5 * (int) pow((double) 2,20);
     
-    return [self postResource:@"media/upload.json"
-                baseURLString:kBaseURLStringUpload_1_1
-                   parameters:md
-          uploadProgressBlock:uploadProgressBlock
-        downloadProgressBlock:nil
-                 successBlock:^(NSDictionary *rateLimits, id response) {
-                     successBlock(response);
-                 } errorBlock:^(NSError *error) {
-                     errorBlock(error);
-                 }];
+    NSUInteger segmentIndex = 0;
+    
+    __block id lastResponseReceived = nil;
+    __block NSError *lastErrorReceived = nil;
+    __block NSUInteger accumulatedBytesWritten = 0;
+    
+    dispatch_group_t group = dispatch_group_create();
+    
+    while((segmentIndex * fiveMegaBytes) < dataLength) {
+        
+        NSUInteger subDataLength = MIN(dataLength - segmentIndex * fiveMegaBytes, fiveMegaBytes);
+        NSRange subDataRange = NSMakeRange(segmentIndex * fiveMegaBytes, subDataLength);
+        NSData *subData = [data subdataWithRange:subDataRange];
+        
+        //NSLog(@"-- SEGMENT INDEX %lu, SUBDATA %@", segmentIndex, NSStringFromRange(subDataRange));
+        
+        __weak typeof(self) weakSelf = self;
+        
+        dispatch_group_enter(group);
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            if(strongSelf == nil) {
+                lastErrorReceived = [NSError errorWithDomain:@"STTwitter" code:9999 userInfo:nil]; // TODO: improve
+                return;
+            }
+            
+            NSMutableDictionary *md = [NSMutableDictionary dictionary];
+            md[@"command"] = @"APPEND";
+            md[@"media_id"] = mediaID;
+            md[@"segment_index"] = [NSString stringWithFormat:@"%lu", (unsigned long)segmentIndex];
+            md[@"media"] = subData;
+            md[kSTPOSTDataKey] = @"media";
+            md[kSTPOSTMediaFileNameKey] = fileName;
+            
+            //NSLog(@"-- POST %@", [md valueForKey:@"segment_index"]);
+            
+            [strongSelf postResource:@"media/upload.json"
+                 baseURLString:kBaseURLStringUpload_1_1
+                    parameters:md
+           uploadProgressBlock:^(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite) {
+               accumulatedBytesWritten += bytesWritten;
+               uploadProgressBlock(bytesWritten, accumulatedBytesWritten, dataLength);
+           } downloadProgressBlock:nil
+                  successBlock:^(NSDictionary *rateLimits, id response) {
+                      //NSLog(@"-- POST OK %@", [md valueForKey:@"segment_index"]);
+                      lastResponseReceived = response;
+                      dispatch_group_leave(group);
+                  } errorBlock:^(NSError *error) {
+                      //NSLog(@"-- POST KO %@", [md valueForKey:@"segment_index"]);
+                      errorBlock(error);
+                      dispatch_group_leave(group);
+                  }];
+        });
+        
+        segmentIndex += 1;
+    }
+    
+    dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        NSLog(@"finished");
+        if(lastErrorReceived) {
+            errorBlock(lastErrorReceived);
+        } else {
+            successBlock(lastResponseReceived);
+        }
+    });
 }
 
 - (NSObject<STTwitterRequestProtocol> *)postMediaUploadFINALIZEWithMediaID:(NSString *)mediaID
